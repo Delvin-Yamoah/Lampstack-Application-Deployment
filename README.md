@@ -165,4 +165,4 @@ This project demonstrates deploying a simple LAMP (Linux, Apache, MySQL, PHP) st
 - **/info.php** - PHP configuration information
 - **/healthcheck.php** - Health check endpoint for load balancer
 
-See api_documentation.md for detailed API and endpoint usage.
+See api_documentation.md in scripts folder for detailed API and endpoint usage.
