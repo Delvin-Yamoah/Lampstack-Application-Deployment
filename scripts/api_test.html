@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #0066cc;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        input[type="email"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background: #0066cc;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0052a3;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-left: 4px solid #0066cc;
+            white-space: pre-wrap;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>API Test Page</h1>
+        
+        <h2>Create New User</h2>
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" placeholder="Enter name">
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" placeholder="Enter email">
+        </div>
+        <button onclick="createUser()">Create User</button>
+        
+        <h2>View All Users</h2>
+        <button onclick="getUsers()">Refresh Users</button>
+        
+        <div id="result"></div>
+        <div id="users-table"></div>
+        
+        <script>
+            // API URL - Update with your EC2 public IP
+            const apiUrl = window.location.origin + '/api.php';
+            
+            // Function to create a new user
+            async function createUser() {
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                
+                if (!name || !email) {
+                    document.getElementById('result').textContent = 'Error: Name and email are required';
+                    return;
+                }
+                
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ name, email })
+                    });
+                    
+                    const data = await response.json();
+                    document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+                    
+                    if (data.success) {
+                        // Clear form and refresh users list
+                        document.getElementById('name').value = '';
+                        document.getElementById('email').value = '';
+                        getUsers();
+                    }
+                } catch (error) {
+                    document.getElementById('result').textContent = 'Error: ' + error.message;
+                }
+            }
+            
+            // Function to get all users
+            async function getUsers() {
+                try {
+                    const response = await fetch(apiUrl);
+                    const data = await response.json();
+                    
+                    if (data.success && data.users) {
+                        // Display users in a table
+                        const usersTable = document.getElementById('users-table');
+                        
+                        if (data.users.length === 0) {
+                            usersTable.innerHTML = '<p>No users found</p>';
+                            return;
+                        }
+                        
+                        let tableHtml = `
+                            <table>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Created At</th>
+                                </tr>
+                        `;
+                        
+                        data.users.forEach(user => {
+                            tableHtml += `
+                                <tr>
+                                    <td>${user.id}</td>
+                                    <td>${user.name}</td>
+                                    <td>${user.email}</td>
+                                    <td>${user.created_at}</td>
+                                </tr>
+                            `;
+                        });
+                        
+                        tableHtml += '</table>';
+                        usersTable.innerHTML = tableHtml;
+                    } else {
+                        document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+                    }
+                } catch (error) {
+                    document.getElementById('result').textContent = 'Error: ' + error.message;
+                }
+            }
+            
+            // Load users when page loads
+            window.onload = getUsers;
+        </script>
+    </div>
+</body>
+</html>

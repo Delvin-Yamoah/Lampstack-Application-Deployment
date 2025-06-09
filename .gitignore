@@ -1,0 +1,46 @@
+# Ignore .pem files (private keys)
+*.pem
+
+# Configuration files that might contain credentials; they are empty for now so make the required changes
+#config.php
+#*config*.php 
+.env
+*.env
+
+# Logs
+*.log
+logs/
+error_log
+
+# Cache files
+*.cache
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# IDE specific files
+.idea/
+.vscode/
+*.sublime-*
+*.code-workspace
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Dependency directories
+vendor/
+node_modules/
+
+# Build directories
+build/
+dist/
