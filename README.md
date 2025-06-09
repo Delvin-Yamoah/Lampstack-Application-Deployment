@@ -22,6 +22,8 @@ This project demonstrates deploying a simple LAMP (Linux, Apache, MySQL, PHP) st
 - **Monitoring:** CloudWatch for metrics and alarms
 - **Notifications:** SNS for alerts and notifications
 
+![Architecture Diagram](./lampstack.png)
+
 ## AWS Components Used
 
 ### Compute and Networking
