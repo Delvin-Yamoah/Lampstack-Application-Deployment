@@ -1,32 +1,28 @@
 # Ignore .pem files (private keys)
 *.pem
 
-# Configuration files that might contain credentials; they are empty for now so make the required changes
-#config.php
-#*config*.php 
-.env
-*.env
+# Ignore script files (using console-based approach)
+scripts/*.sh
+scripts/*.py
+
+# Keep reference documentation and configuration files
+!scripts/*.md
+!scripts/*.conf
+!scripts/*.html
 
 # Logs
 *.log
 logs/
-error_log
 
-# Cache files
-*.cache
-
-# Temporary files
-*.tmp
-*.temp
-*.swp
-*.swo
-*~
+# Environment variables
+.env
+*.env
 
 # IDE specific files
 .idea/
 .vscode/
-*.sublime-*
-*.code-workspace
+*.swp
+*.swo
 
 # OS generated files
 .DS_Store
@@ -37,10 +33,15 @@ error_log
 ehthumbs.db
 Thumbs.db
 
-# Dependency directories
-vendor/
-node_modules/
-
 # Build directories
 build/
 dist/
+node_modules/
+
+# Temporary files
+*.tmp
+*.temp
+*~
+
+# Cache files
+*.cache
